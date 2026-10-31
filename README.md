@@ -9,7 +9,10 @@ No account needed. No tracking. No ads. Just open the files in your browser, fil
 | File | What it does |
 | --- | --- |
 | `index.html` | A single printable HTML page with all four tools, fillable in your browser |
-| `pantry-kit.md` | The same four tools in Markdown, for notes, copy-paste, or paper |
+| `pantry-kit.md` | The same four tools in Markdown, for notes, copy-paste, or paper printing |
+| `README.md` | This file — overview, usage, and license |
+| `LICENSE` | MIT License |
+| `STATUS.md` | Build status, verification results, and known gaps |
 
 ## The four tools
 
@@ -20,11 +23,24 @@ No account needed. No tracking. No ads. Just open the files in your browser, fil
 
 ## How to use it
 
+### In your browser (recommended)
+
 1. Open `index.html` in any modern browser.
 2. Fill in the fields. Everything saves in your browser only.
 3. When you are ready to print, press **Ctrl+P** (or Cmd+P on Mac) and choose a printer.
 
-For a paper copy, print first, then walk your pantry with a pen.
+### On paper
+
+1. Open `index.html` and print it first for a blank paper copy.
+2. Walk your pantry with a pen and fill in the forms by hand.
+3. Use the Markdown file (`pantry-kit.md`) if you prefer to write notes in a text editor or copy rows into your own documents.
+
+## Tips
+
+- **Color-code after printing** — green = eat soon, yellow = use within a week, red = expired.
+- **Run the price book weekly** at your usual store to catch rising prices early.
+- **Audit one table at a time** — this keeps the task low-energy and ADHD-friendly.
+- **Keep checked-off items** from the grocery list as a running note to rebuild next time.
 
 ## Local-first and private
 
@@ -35,3 +51,7 @@ Everything runs locally in your browser. Nothing is uploaded, nothing is tracked
 This project is licensed under the [MIT License](LICENSE).
 
 Copyright (c) 2026 Asdale Dynamics, LLC
+
+## About
+
+Made by **Dylan Asdale**, founder of Asdale Dynamics, LLC (Indiana, formed Oct 2026). His book *The Massive AI Manual* and hub site [dylanasdale.github.io](https://dylanasdale.github.io) explain AI "like a friend would": plain English, step by step, never condescending. Asdale Dynamics, LLC focuses on beginner-friendly AI education, books and guides, practical tools, and accessible life-admin helpers.

@@ -310,14 +310,15 @@ function addStockRow(){
   tbody.appendChild(tr);
 }
 function addGroceryRow(){
-  const target = document.querySelector('nav.tabs a.active')?.getAttribute('href') || '#grocery';
-  let tbodyId = 'grocery-pantry';
-  document.querySelectorAll('.panel').forEach(p=>{ if(!p.classList.contains('hidden')) {
-    let t=p.querySelector('tbody'); if(t){ /* no-op */ }
-  }});
-  // default to pantry section; user can move rows while editing
-  const tbody=document.getElementById(tbodyId);
-  if(tbody.rows.length===1 && tbody.querySelector('td.muted')){tbody.innerHTML='';}
+  // Add to the first grocery section that already has entries; otherwise default to Pantry Staples.
+  const sections = ['grocery-produce','grocery-dairy','grocery-meat','grocery-pantry','grocery-frozen'];
+  let tbody = null;
+  for(const id of sections){
+    const t = document.getElementById(id);
+    if(t && !(t.rows.length===1 && t.querySelector('td.muted'))){ tbody = t; break; }
+  }
+  if(!tbody) tbody = document.getElementById('grocery-pantry');
+  if(tbody.rows.length===1 && tbody.querySelector('td.muted')){ tbody.innerHTML=''; }
   const tr=document.createElement('tr');
   tr.innerHTML='<td class="row-marker"></td>'
     +'<td><input type="text" placeholder="Item name"></td>'

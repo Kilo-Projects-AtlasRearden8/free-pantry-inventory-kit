@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Pantry Inventory Kit &mdash; Asdale Dynamics, LLC</title>
+<meta name="description" content="A free, printable, fillable pantry management kit: stock tracker, grocery master list, price book, and meal-staples checklist. No account needed.">
+<style>
+:root {
+  --ink: #2b2b2b;
+  --muted: #6b6b6b;
+  --accent: #2e7d32;
+  --accent-warm: #8d6e63;
+  --line: #d7ccc8;
+  --bg: #fdf8f5;
+  --card: #ffffff;
+  --radius: 10px;
+  --shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, -apple-system, "Noto Sans", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.5;
+}
+header.site-header {
+  background: linear-gradient(135deg, #2e7d32 0%, #4caf50 100%);
+  color: #fff;
+  padding: 22px 24px;
+  box-shadow: var(--shadow);
+}
+header.site-header h1 { margin: 0; font-size: 1.5rem; }
+header.site-header p { margin: 4px 0 0; opacity: .92; font-size: .92rem; }
+main { padding: 20px 16px 40px; max-width: 1000px; margin: 0 auto; }
+.toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+button, .btn {
+  border: none; background: var(--accent); color: #fff;
+  padding: 9px 16px; border-radius: var(--radius); cursor: pointer;
+  font-size: .95rem; font-weight: 600; transition: opacity .12s;
+}
+button:hover, .btn:hover { opacity: .9; }
+button.secondary { background: var(--accent-warm); }
+nav.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+nav.tabs a {
+  display: block; padding: 9px 14px; border-radius: var(--radius) var(--radius) 0 0;
+  background: #e8f5e9; color: var(--muted); text-decoration: none;
+  font-size: .92rem; font-weight: 600; border: 1px solid var(--line);
+  border-bottom: none;
+}
+nav.tabs a:hover { background: var(--accent); color: #fff; }
+nav.tabs a.active { background: var(--card); color: var(--ink); border-color: var(--line); }
+section.panel {
+  background: var(--card); border-radius: var(--radius);
+  box-shadow: var(--shadow); border: 1px solid var(--line);
+  padding: 22px 22px 26px; margin-bottom: 24px;
+}
+section.panel.hidden { display: none; }
+section.panel h2 {
+  margin: 0 0 6px; font-size: 1.25rem; color: var(--accent);
+  border-bottom: 2px solid var(--line); padding-bottom: 6px;
+}
+section.panel p.lead { margin: 6px 0 0 0; color: var(--muted); font-size: .9rem; }
+section.panel h3 { margin: 18px 0 10px; font-size: 1.02rem; color: var(--ink); }
+
+table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: .92rem; }
+th, td { border: 1px solid var(--line); padding: 8px 9px; text-align: left; }
+th { background: #e8f5e9; font-weight: 700; }
+input, select, textarea {
+  width: 100%; border: 1px solid var(--line); border-radius: 6px;
+  padding: 7px 9px; font: inherit; font-size: .92rem;
+  background: #fafafa;
+}
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); border-color: var(--accent); background: #fff; }
+input[type=number] { text-align: right; }
+input[type=checkbox] { width: auto; height: auto; }
+.checklist td { text-align: center; }
+.checklist input[type=checkbox] { margin: 0 auto; }
+
+/* repeatable-row helper */
+.row-actions button { padding: 6px 10px; font-size: .82rem; }
+.grocery-table td.row-marker { width: 3%; }
+
+.muted { color: var(--muted); font-size: .86rem; }
+.note { background: #fff8e1; border-left: 4px solid #ffb300; padding: 9px 12px; border-radius: 6px; margin: 12px 0; }
+.print-note { color: #666; font-size: .84rem; margin-top: 6px; }
+
+/* PRINT STYLES */
+@media print {
+  body { background: #fff; }
+  header.site-header, .toolbar, nav.tabs, .print-note, .no-print { display: none !important; }
+  main { max-width: 100%; margin: 0; padding: 0; }
+  section.panel {
+    border: 1px solid #bbb; border-radius: 0; box-shadow: none;
+    page-break-inside: avoid; break-inside: avoid;
+  }
+  section.panel h2 { border-bottom: 1px solid #bbb; }
+  section.panel h3 { page-break-after: avoid; break-after: avoid; }
+  table { page-break-inside: auto; }
+  tr { page-break-inside: avoid; break-inside: avoid; }
+  .row-actions { display: none; }
+  .no-print { display: none !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <h1>Free Pantry Inventory Kit</h1>
+  <p>Stock tracker &middot; Grocery list &middot; Price book &middot; Meal staples checklist</p>
+  <p class="print-note">Fill in your browser, then print (Ctrl+P). Fillable fields keep their values in the browser; if your browser asks whether to print background colors, it is fine to say yes.</p>
+</header>
+
+<main>
+  <div class="toolbar no-print">
+    <button onclick="window.print()">Print this kit</button>
+    <button class="secondary" onclick="clearAll()">Clear all fields</button>
+    <button class="secondary" onclick="addPriceRow()">+ Price row</button>
+    <button class="secondary" onclick="addGroceryRow()">+ Grocery row</button>
+  </div>
+
+  <nav class="tabs no-print">
+    <a href="#stock" class="active" onclick="show('stock')">Stock Tracker</a>
+    <a href="#grocery" onclick="show('grocery')">Grocery Master List</a>
+    <a href="#price" onclick="show('price')">Price Book</a>
+    <a href="#staples" onclick="show('staples')">Meal Staples Checklist</a>
+  </nav>
+
+  <!-- 1. STOCK TRACKER -->
+  <section id="stock" class="panel">
+    <h2>1. Pantry Stock Tracker</h2>
+    <p class="lead">Track what you have, when it was added, and when it expires. Aim to use items before their best-by date (FIFO = first in, first out).</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Category</th>
+          <th>Location</th>
+          <th>Qty</th>
+          <th>Best-by / Expiry</th>
+          <th>Date added</th>
+          <th class="no-print">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="stock-body">
+        <tr><td colspan="7" class="muted">Click "+ Stock row" below, or print first for a blank paper copy.</td></tr>
+      </tbody>
+    </table>
+    <div class="note">Tip: color-code by hand after printing &mdash; green = eat soon, yellow = use within a week, red = expired.</div>
+    <button class="no-print" onclick="addStockRow()" style="margin-top:8px">+ Stock row</button>
+    <p class="print-note">Print Tip: Use the paper copy to walk your pantry with a pen, then tally items at home.</p>
+  </section>
+
+  <!-- 2. GROCERY MASTER LIST -->
+  <section id="grocery" class="panel hidden">
+    <h2>2. Grocery Master List</h2>
+    <p class="lead">Your reusable master list of items to buy. Keep checked-off items for next time &mdash; the list grows with you.</p>
+    <h3>Produce</h3>
+    <table class="grocery-table">
+      <thead>
+        <tr><th class="row-marker"></th><th>Item</th><th class="no-print">Unit / Size</th><th class="no-print">Typical brand / note</th><th>Buy?</th></tr>
+      </thead>
+      <tbody id="grocery-produce"><tr><td colspan="5" class="muted">Use + Grocery row to add items, or print for a blank copy.</td></tr></tbody>
+    </table>
+    <h3>Dairy & Eggs</h3>
+    <table class="grocery-table">
+      <thead><tr><th class="row-marker"></th><th>Item</th><th class="no-print">Unit / Size</th><th class="no-print">Typical brand / note</th><th>Buy?</th></tr></thead>
+      <tbody id="grocery-dairy"><tr><td colspan="5" class="muted">Use + Grocery row to add items, or print for a blank copy.</td></tr></tbody>
+    </table>
+    <h3>Meat, Fish & Condiments</h3>
+    <table class="grocery-table">
+      <thead><tr><th class="row-marker"></th><th>Item</th><th class="no-print">Unit / Size</th><th class="no-print">Typical brand / note</th><th>Buy?</th></tr></thead>
+      <tbody id="grocery-meat"><tr><td colspan="5" class="muted">Use + Grocery row to add items, or print for a blank copy.</td></tr></tbody>
+    </table>
+    <h3>Pantry Staples</h3>
+    <table class="grocery-table">
+      <thead><tr><th class="row-marker"></th><th>Item</th><th class="no-print">Unit / Size</th><th class="no-print">Typical brand / note</th><th>Buy?</th></tr></thead>
+      <tbody id="grocery-pantry"><tr><td colspan="5" class="muted">Use + Grocery row to add items, or print for a blank copy.</td></tr></tbody>
+    </table>
+    <h3>Frozen</h3>
+    <table class="grocery-table">
+      <thead><tr><th class="row-marker"></th><th>Item</th><th class="no-print">Unit / Size</th><th class="no-print">Typical brand / note</th><th>Buy?</th></tr></thead>
+      <tbody id="grocery-frozen"><tr><td colspan="5" class="muted">Use + Grocery row to add items, or print for a blank copy.</td></tr></tbody>
+    </table>
+    <p class="print-note">Print Tip: Check off items with a pen as you shop. Move checked items to a running "bought" note to rebuild next time.</p>
+  </section>
+
+  <!-- 3. PRICE BOOK -->
+  <section id="price" class="panel hidden">
+    <h2>3. Price Book</h2>
+    <p class="lead">Compare unit prices across stores for the items you buy most. Lower price-per-unit wins.</p>
+    <h3>Price log</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Store</th>
+          <th class="no-print">Brand / Size</th>
+          <th>Price ($)</th>
+          <th class="no-print">Unit / qty</th>
+          <th>Price per unit</th>
+          <th class="no-print">Date seen</th>
+          <th class="no-print">Star best</th>
+        </tr>
+      </thead>
+      <tbody id="price-body">
+        <tr><td colspan="8" class="muted">Click "+ Price row" above, or print first for a blank paper copy.</td></tr>
+      </tbody>
+    </table>
+    <div class="note">Unit price = Price / Unit qty. Example: $3.00 for 12 oz = $0.25 / oz.</div>
+    <button class="no-print" onclick="addPriceRow()" style="margin-top:8px">+ Price row</button>
+  </section>
+
+  <!-- 4. MEAL-STAPLES CHECKLIST -->
+  <section id="staples" class="panel hidden">
+    <h2>4. Meal Staples Checklist</h2>
+    <p class="lead">A kitchen "staples audit" so you always have the building blocks for quick meals on hand.</p>
+
+    <h3>Oil, Salt, Acid, Heat basics</h3>
+    <table class="checklist">
+      <thead><tr><th>Item</th><th>Have?</th><th class="no-print">Notes / target</th></tr></thead>
+      <tbody id="staples-os">
+        <tr><td>Olive oil (or neutral oil)</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="e.g. 500 ml"></td></tr>
+        <tr><td>Vinegar (white / apple cider)</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="e.g. 375 ml"></td></tr>
+        <tr><td>Lemon or lime</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="#"></td></tr>
+        <tr><td>Salt (kosher / sea / table)</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="kind"></td></tr>
+        <tr><td>Black pepper (whole / ground)</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="grind"></td></tr>
+        <tr><td>Heat: dried chili / hot sauce</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="favorite"></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Dry pantry (carbs, beans, grains)</h3>
+    <table class="checklist">
+      <thead><tr><th>Item</th><th>Have?</th><th class="no-print">Notes / target</th></tr></thead>
+      <tbody id="staples-dry">
+        <tr><td>Rice (white / brown / jasmine)</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="e.g. 2 kg"></td></tr>
+        <tr><td>Pasta (long / short / shaped)</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="shape"></td></tr>
+        <tr><td>Flour (all-purpose / whole wheat)</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="e.g. 1 kg"></td></tr>
+        <tr><td>Sugar (granulated / brown)</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="type"></td></tr>
+        <tr><td>Saltines / crackers / chips</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="preferred"></td></tr>
+        <tr><td>Canned beans (black / pinto / chickpeas)</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="# cans"></td></tr>
+        <tr><td>Lentils / split peas</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="e.g. 500 g"></td></tr>
+        <tr><td>Nuts / seeds (almonds, peanut, etc.)</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="kind + amount"></td></tr>
+        <tr><td>Nut butter (peanut / almond)</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="jar size"></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Cold staples (fridge / freezer)</h3>
+    <table class="checklist">
+      <thead><tr><th>Item</th><th>Have?</th><th class="no-print">Notes / target</th></tr></thead>
+      <tbody id="staples-cold">
+        <tr><td>Eggs</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="e.g. 1 dozen"></td></tr>
+        <tr><td>Milk / cream / half-and-half</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="type"></td></tr>
+        <tr><td>Butter / margarine</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="# sticks / blocks"></td></tr>
+        <tr><td>Cheese (shredded / block / parmesan)</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="type + amount"></td></tr>
+        <tr><td>Yogurt / kefir</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="type"></td></tr>
+        <tr><td>Frozen vegetables / berries</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="bags / mixes"></td></tr>
+        <tr><td>Frozen protein (chicken, fish)</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="# lbs / packs"></td></tr>
+        <tr><td>Bread / tortillas / wraps</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="kind + qty"></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Pantry flavor boosters</h3>
+    <table class="checklist">
+      <thead><tr><th>Item</th><th>Have?</th><th class="no-print">Notes / target</th></tr></thead>
+      <tbody id="staples-boost">
+        <tr><td>Canned tomatoes (diced / crushed / paste)</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="# cans"></td></tr>
+        <tr><td>Bouillon / stock cubes / powder</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="flavor</td></tr>
+        <tr><td>Soy sauce / Worcestershire / fish sauce</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="bottles"></td></tr>
+        <tr><td>Spices (list 3 &ndash; 5 basics)</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="e.g. chili, cumin, paprika"></td></tr>
+        <tr><td>Coconut milk / cream</td><td class="checklist"><input type="checkbox"></td><td class="no-print"><input type="text" placeholder="# cans"></td></tr>
+      </tbody>
+    </table>
+    <p class="print-note">Print Tip: Audit your kitchen against one table at a time, checking boxes as you go. Restock what is missing.</p>
+  </section>
+
+  <footer class="muted" style="text-align:center; margin-top:18px">
+    Free Pantry Inventory Kit &middot; Made available by Asdale Dynamics, LLC &middot; MIT License
+  </footer>
+</main>
+
+<script>
+function show(id){
+  document.querySelectorAll('nav.tabs a').forEach(a=>a.classList.remove('active'));
+  document.querySelectorAll('section.panel').forEach(s=>s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  let link = document.querySelector('nav.tabs a[href="#'+id+'"]');
+  if(link) link.classList.add('active');
+  window.location.hash = '#'+id;
+}
+function clearAll(){
+  if(!confirm('Clear all filled values?')) return;
+  document.querySelectorAll('input').forEach(i=>{
+    if(i.type==='checkbox') i.checked=false;
+    else i.value='';
+  });
+}
+function addStockRow(){
+  const tbody=document.getElementById('stock-body');
+  if(tbody.rows.length===1 && tbody.querySelector('td.muted')){tbody.innerHTML='';}
+  const tr=document.createElement('tr');
+  tr.innerHTML='<td><input type="text" placeholder="e.g. Black beans"></td>'
+    +'<td><input type="text" placeholder="e.g. Canned goods"></td>'
+    +'<td><input type="text" placeholder="e.g. Shelf 2"></td>'
+    +'<td><input type="number" min="0" step="1" value="1"></td>'
+    +'<td><input type="date"></td>'
+    +'<td><input type="date"></td>'
+    +'<td class="no-print"><button onclick="this.parentNode.parentNode.remove()">Remove</button></td>';
+  tbody.appendChild(tr);
+}
+function addGroceryRow(){
+  const target = document.querySelector('nav.tabs a.active')?.getAttribute('href') || '#grocery';
+  let tbodyId = 'grocery-pantry';
+  document.querySelectorAll('.panel').forEach(p=>{ if(!p.classList.contains('hidden')) {
+    let t=p.querySelector('tbody'); if(t){ /* no-op */ }
+  }});
+  // default to pantry section; user can move rows while editing
+  const tbody=document.getElementById(tbodyId);
+  if(tbody.rows.length===1 && tbody.querySelector('td.muted')){tbody.innerHTML='';}
+  const tr=document.createElement('tr');
+  tr.innerHTML='<td class="row-marker"></td>'
+    +'<td><input type="text" placeholder="Item name"></td>'
+    +'<td class="no-print"><input type="text" placeholder="e.g. 1 bunch"></td>'
+    +'<td class="no-print"><input type="text" placeholder="brand"></td>'
+    +'<td><input type="checkbox"></td>';
+  tbody.appendChild(tr);
+}
+function addPriceRow(){
+  const tbody=document.getElementById('price-body');
+  if(tbody.rows.length===1 && tbody.querySelector('td.muted')){tbody.innerHTML='';}
+  const tr=document.createElement('tr');
+  tr.innerHTML='<td><input type="text" placeholder="Item"></td>'
+    +'<td><input type="text" placeholder="Store"></td>'
+    +'<td class="no-print"><input type="text" placeholder="brand / size"></td>'
+    +'<td><input type="number" min="0" step="0.01" placeholder="3.99"></td>'
+    +'<td class="no-print"><input type="text" placeholder="e.g. 12 oz"></td>'
+    +'<td><input type="text" placeholder="auto"></td>'
+    +'<td class="no-print"><input type="date"></td>'
+    +'<td class="no-print"><input type="checkbox"></td>';
+  tbody.appendChild(tr);
+}
+</script>
+</body>
+</html>
